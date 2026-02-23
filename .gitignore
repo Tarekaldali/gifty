@@ -1,0 +1,48 @@
+# Standard .gitignore for Node.js, Python, and general projects
+# Node.js
+node_modules/
+dist/
+build/
+.env
+npm-debug.log
+yarn-error.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# General
+*.log
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitmodules
+
+# Others
+*.bak
+*.tmp
+
+# Ignore coverage reports
+coverage/
+
+# Ignore test output
+*.out
+
+# Ignore local settings
+local.settings.json
