@@ -13,6 +13,8 @@ const productSchema = new mongoose.Schema(
     description: { type: String, default: "" },
     price:       { type: Number, required: true },
     image:       { type: String, default: "" },              // URL to product image
+    modelPath:   { type: String, default: "" },              // Path to 3D model (e.g., /models/bar.glb)
+    scale:       { type: Number, default: 0.05 },             // 3D model scale (size multiplier)
     category:    {
       type: String,
       enum: ["graduation", "wedding", "birthday", "general"],

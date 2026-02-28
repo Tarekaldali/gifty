@@ -20,7 +20,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ─── Import route files ─────────────────────────────────
 import authRoutes     from "./routes/authRoutes.js";
@@ -40,6 +44,10 @@ const PORT = process.env.PORT || 8000;
 // ─── Middleware ─────────────────────────────────────────
 app.use(cors());           // Allow the React frontend (port 5173) to call this server
 app.use(express.json());   // Parse JSON bodies from incoming requests
+
+// serve static files from server/public
+const staticDir = path.join(__dirname, "public");
+app.use(express.static(staticDir));  // Serve static files (3D models, images, etc.)
 
 // ─── API Routes ─────────────────────────────────────────
 app.use("/api/auth",       authRoutes);      // Register, Login, Me, Forgot password

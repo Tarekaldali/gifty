@@ -15,6 +15,10 @@ const giftBoxSchema = new mongoose.Schema(
     maxItems:  { type: Number, default: 5 },     // how many items fit inside
     basePrice: { type: Number, default: 0 },     // box itself costs this much
     image:     { type: String, default: "" },
+    // 3D model file path (relative to public folder)
+    modelPath: { type: String, default: "" },
+    // scale factor for rendering the 3D model
+    scale:     { type: Number, default: 0.05 },
   },
   { timestamps: true }
 );
