@@ -6,9 +6,10 @@ export default function ManageProducts() {
   const [products, setProducts] = useState([]);
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({
-    name: "", description: "", price: "", image: "", category: "general", stock: "",
+    name: "", description: "", price: "", image: "", modelPath: "", scale: "0.05", category: "general", stock: "",
   });
   const [msg, setMsg] = useState({ text: "", type: "" });
+  const [uploading, setUploading] = useState(false);
 
   const flash = (text, type = "success") => {
     setMsg({ text, type });
@@ -20,11 +21,39 @@ export default function ManageProducts() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Handle 3D model file upload
+  const handleModelUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith(".glb")) {
+      flash("Only .glb files are supported", "error");
+      return;
+    }
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("model", file);
+
+    try {
+      const res = await API.post("/products/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setForm({ ...form, modelPath: res.data.modelPath });
+      flash("Model uploaded successfully");
+    } catch (err) {
+      flash(err.response?.data?.error || "Upload failed", "error");
+    } finally {
+      setUploading(false);
+      e.target.value = ""; // Reset file input
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name.trim()) { flash("Product name is required", "error"); return; }
     if (!form.price || Number(form.price) <= 0) { flash("Price must be greater than 0", "error"); return; }
-    const data = { ...form, price: Number(form.price), stock: Number(form.stock) || 0 };
+    const data = { ...form, price: Number(form.price), stock: Number(form.stock) || 0, scale: Number(form.scale) || 0.05 };
     try {
       if (editId) {
         await API.put(`/products/${editId}`, data);
@@ -33,7 +62,7 @@ export default function ManageProducts() {
         await API.post("/products", data);
         flash("Product created successfully");
       }
-      setForm({ name: "", description: "", price: "", image: "", category: "general", stock: "" });
+      setForm({ name: "", description: "", price: "", image: "", modelPath: "", category: "general", stock: "" });
       setEditId(null);
       load();
     } catch (err) {
@@ -45,7 +74,7 @@ export default function ManageProducts() {
     setEditId(p._id);
     setForm({
       name: p.name, description: p.description, price: p.price,
-      image: p.image, category: p.category, stock: p.stock,
+      image: p.image, modelPath: p.modelPath || "", scale: String(p.scale || "0.05"), category: p.category, stock: p.stock,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -73,7 +102,7 @@ export default function ManageProducts() {
 
   const resetForm = () => {
     setEditId(null);
-    setForm({ name: "", description: "", price: "", image: "", category: "general", stock: "" });
+    setForm({ name: "", description: "", price: "", image: "", modelPath: "", scale: "0.05", category: "general", stock: "" });
   };
 
   return (
@@ -114,6 +143,25 @@ export default function ManageProducts() {
           <div className="adm-field">
             <label>Image URL</label>
             <input name="image" value={form.image} onChange={handleChange} placeholder="https://..." />
+          </div>
+          <div className="adm-field">
+            <label>3D Model (.glb file) {uploading && <span style={{ color: "#f39c12" }}>Uploading...</span>}</label>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <input 
+                type="file" 
+                accept=".glb" 
+                onChange={handleModelUpload}
+                disabled={uploading}
+                style={{ flex: 1 }}
+              />
+              {form.modelPath && (
+                <span style={{ fontSize: "0.85rem", color: "#27ae60" }}>✓ {form.modelPath}</span>
+              )}
+            </div>
+          </div>
+          <div className="adm-field">
+            <label>3D Model Scale (0.01=tiny, 0.05=small, 0.1=normal, 0.5=large, 1=very large)</label>
+            <input name="scale" type="number" step="0.01" min="0.001" value={form.scale} onChange={handleChange} placeholder="0.05" />
           </div>
           <div className="adm-form-actions">
             <button type="submit" className="adm-btn adm-btn--primary">
