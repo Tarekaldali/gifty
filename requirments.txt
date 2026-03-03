@@ -1,0 +1,100 @@
+============================================================
+  Gifty – Project Dependencies & Setup Instructions
+============================================================
+
+Prerequisites:
+  - Node.js v18+ (https://nodejs.org)
+  - npm (comes with Node.js)
+  - MongoDB Atlas account (online database)
+
+============================================================
+  1. ROOT PROJECT SETUP
+============================================================
+  cd project
+  npm install
+
+  Root dependencies:
+    bcrypt         ^6.0.0      – Password hashing
+    bcryptjs       ^3.0.3      – Password hashing (JS fallback)
+    cors           ^2.8.6      – Cross-Origin Resource Sharing
+    dotenv         ^17.3.1     – Environment variables (.env)
+    express        ^5.2.1      – Web framework
+    jsonwebtoken   ^9.0.3      – JWT authentication
+    mongoose       ^9.2.1      – MongoDB ODM (database driver)
+
+  Root devDependencies:
+    nodemon        ^3.1.13     – Auto-restart server on changes
+
+============================================================
+  2. SERVER SETUP
+============================================================
+  cd server
+  npm install
+
+  Server dependencies:
+    bcrypt         ^6.0.0      – Password hashing
+    cors           ^2.8.6      – Cross-Origin Resource Sharing
+    dotenv         ^17.3.1     – Environment variables (.env)
+    express        ^5.2.1      – Web framework
+    jsonwebtoken   ^9.0.3      – JWT authentication
+    mongoose       ^9.2.1      – MongoDB ODM (database driver)
+
+  Server devDependencies:
+    nodemon        ^3.1.13     – Auto-restart server on changes
+
+  Environment Variables (server/.env):
+    PORT=8000
+    MONGO_URL=mongodb+srv://<user>:<pass>@cluster0.xxx.mongodb.net/ecommerce_3d?retryWrites=true&w=majority
+    JWT_SECRET=<your_secret_key>
+
+  Run server:
+    npm run dev     (development with auto-reload)
+    npm start       (production)
+
+  Seed database:
+    node seed.js        (products)
+    node seedBoxes.js   (gift box types & ready boxes)
+
+============================================================
+  3. FRONTEND SETUP
+============================================================
+  cd frontend
+  npm install
+
+  Frontend dependencies:
+    @react-three/drei    ^10.7.7    – React Three Fiber helpers (3D)
+    @react-three/fiber   ^9.5.0     – React renderer for Three.js (3D)
+    axios                ^1.13.5    – HTTP client (API calls)
+    react                ^19.2.0    – UI library
+    react-dom            ^19.2.0    – React DOM renderer
+    react-router-dom     ^7.13.0    – Client-side routing
+    three                ^0.183.1   – 3D graphics engine (Three.js)
+
+  Frontend devDependencies:
+    @eslint/js                 ^9.39.1    – ESLint core
+    @types/react               ^19.2.7    – React TypeScript types
+    @types/react-dom           ^19.2.3    – React DOM TypeScript types
+    @vitejs/plugin-react       ^5.1.1     – Vite React plugin
+    eslint                     ^9.39.1    – Code linter
+    eslint-plugin-react-hooks  ^7.0.1     – React Hooks lint rules
+    eslint-plugin-react-refresh ^0.4.24   – React Refresh lint rules
+    globals                    ^16.5.0    – Global variables list
+    vite                       ^7.3.1     – Frontend build tool / dev server
+
+  Run frontend:
+    npm run dev       (development server at http://localhost:5173)
+    npm run build     (production build)
+
+============================================================
+  QUICK START (install everything & run)
+============================================================
+  # From project root:
+  npm install
+  cd server && npm install && cd ..
+  cd frontend && npm install && cd ..
+
+  # Start backend (terminal 1):
+  cd server && npm run dev
+
+  # Start frontend (terminal 2):
+  cd frontend && npm run dev
